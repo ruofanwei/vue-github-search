@@ -1,0 +1,103 @@
+/* Color customization */
+:root {
+  --primary: #1f6feb;
+  --dark: #0d1117;
+  --lightDark: #21262c;
+  --light: #fafafa;
+  --bg: var(--dark);
+  --fg: var(--light);
+  --navColor: var(--lightDark);
+
+  --codeColor: #3fb950;
+  --codeBg: #444444;
+
+  --base-font-size: 12px;
+  --fluid-typography-ratio: 0.7;
+  --rem: calc(var(--base-font-size) + var(--fluid-typography-ratio) * 1vw);
+
+  --small: 0.5rem;
+  --p: 0.9rem;
+  --h6: 0.9rem;
+  --h5: 0.9rem;
+  --h4: 1rem;
+  --h3: 1.1rem;
+  --h2: 1.2rem;
+  --h1: 1.6rem;
+
+  --bold: 700;
+  --normal: 400;
+
+  font-size: var(--p);
+  font-size: var(--rem);
+  font-weight: var(--normal);
+}
+
+:root {
+  --main-width: calc(100vw - 3em);
+}
+
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+html {
+  font-family: "Open Sans", -apple-system, system-ui, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Helvetica, Arial,
+    "Noto Sans TC", "PingFang TC", "Hiragino Sans GB", "Heiti TC",
+    "Microsoft YaHei", "Microsoft Jhenghei", sans-serif;
+  --font-family: "Open Sans", -apple-system, system-ui, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Helvetica, Arial,
+    "Noto Sans TC", "PingFang TC", "Hiragino Sans GB", "Heiti TC",
+    "Microsoft YaHei", "Microsoft Jhenghei", sans-serif;
+}
+
+body {
+  margin: 0;
+  font-size: var(--p);
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--fg);
+  transition: all 0.3s;
+}
+body {
+  --fg: var(--light);
+  --bg: var(--dark);
+  --navColor: var(--lightDark);
+  --p: 0.9rem;
+}
+
+input[type="text"] {
+  background: var(--bg);
+  width: 20%;
+  height: 28px;
+  border: 1px solid #30363d;
+  color: var(--fg);
+  box-shadow: inset 0px 1px 2px rgba(27, 31, 35, 0.075);
+  border-radius: 6px;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: var(--primary);
+  transition: width 200ms;
+  width: 50%;
+  max-width: 50%;
+}
+input[type="text"]:focus:placeholder-shown {
+  opacity: 0.7;
+}
+::placeholder {
+  color: #c9d1d9;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  input[type="text"] {
+    width: 80%;
+  }
+  input[type="text"]:focus {
+    width: 80%;
+    max-width: 80%;
+  }
+}
