@@ -2,7 +2,11 @@
   <nav id="nav">
     <div class="searchBar">
       <img alt="github" src="../assets/github.svg" width="32px" />
-      <input type="text" placeholder="Search or jump to..." />
+      <input
+        v-model.trim="searchText"
+        type="text"
+        placeholder="Search or jump to..."
+      />
     </div>
     <img alt="github" src="../assets/avatar.svg" width="32px" />
   </nav>
@@ -12,7 +16,20 @@
 export default {
   name: "Header",
   props: {
-    msg: String,
+    type: { type: String, default: "" },
+  },
+  data() {
+    return {
+      searchText: "github",
+    };
+  },
+  watch: {
+    // observe change of searchText
+    searchText: async function (searchText) {
+      if (searchText.length >= 3) {
+        this.$emit("onSearch", searchText);
+      }
+    },
   },
 };
 </script>
@@ -37,5 +54,4 @@ export default {
   gap: 10px;
   width: 100%;
 }
-
 </style>

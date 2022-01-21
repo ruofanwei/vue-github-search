@@ -1,4 +1,4 @@
-import { Octokit } from "https://cdn.skypack.dev/octokit";
+const { Octokit } = require("@octokit/core");
 const octokit = new Octokit({
   auth: `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`,
 });
@@ -11,6 +11,7 @@ export const getRepositories = async (queryString) => {
     "GET /search/repositories",
     {
       q: queryString,
+      per_page: 20
     }
   );
   return repositories;
@@ -22,6 +23,7 @@ export const getRepositories = async (queryString) => {
 export const getTopics = async (queryString) => {
   const { data: topics } = await octokit.request("GET /search/topics", {
     q: queryString,
+    per_page: 20,
   });
   return topics;
 };
@@ -32,6 +34,7 @@ export const getTopics = async (queryString) => {
 export const getUsers = async (queryString) => {
   const { data: users } = await octokit.request("GET /search/users", {
     q: queryString,
+    per_page: 20,
   });
   return users;
 };
