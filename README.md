@@ -1,4 +1,12 @@
-# frontend-recruitment-boilerplate
+## Github Search
+
+### [Demo](https://vue-github-search.vercel.app/)
+![](https://i.imgur.com/aoJBQPf.png)
+### Feature
+- use octokit interact with github api
+- default search keywords is github
+- auto search keywords
+- infinite loading
 
 ## Project setup
 ```
@@ -9,16 +17,3 @@ yarn install
 ```
 yarn serve
 ```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
