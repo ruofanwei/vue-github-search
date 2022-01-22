@@ -47,6 +47,7 @@ export default {
   background: var(--navColor);
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 .searchBar {
   display: flex;

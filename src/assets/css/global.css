@@ -4,11 +4,15 @@
   --active: #ff7b72;
   --dark: #0d1117;
   --lightDark: #21262c;
+  --gray: #8B949E;
   --light: #c9d1d9;
   --bg: var(--dark);
   --fg: var(--light);
   --navColor: var(--lightDark);
 
+  --darkBlue: rgb(20 38 66);
+  --link:#58a6ff;
+  --repo: #3572a5;
   --codeColor: #3fb950;
   --codeBg: #444444;
 
@@ -96,4 +100,53 @@ input[type="text"]:focus:placeholder-shown {
     width: 80%;
     max-width: 80%;
   }
+}
+h1 {
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--navColor);
+}
+main {
+  display: flex;
+  padding: 1rem 10rem;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+ul {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  cursor: pointer;
+  border: 1px solid var(--navColor);
+  margin: 0;
+  padding: 0;
+  border-radius: 6px;
+  font-size: 14px;
+  min-width: 28%;
+}
+li {
+  padding: 0;
+  display: block;
+  border-bottom: 1px solid var(--navColor);
+}
+
+.card {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  border-bottom: 1px solid var(--navColor);
+}
+.title {
+  text-decoration: none;
+  color: var(--link);
+  font-size: var(--h1);
+  font-weight: var(--normal);
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+.title:active {
+  text-decoration: underline;
 }

@@ -1,51 +1,68 @@
 <template>
-  <div>
-    <h1>Showing&nbsp;{{ total }}&nbsp;available repository results</h1>
-    <div class="card" v-for="repository in repositories" :key="repository.id">
-      <a class="title" :href="repository.html_url">{{
-        repository.full_name
-      }}</a>
-      <p>{{ repository.description }}</p>
-      <p>{{ repository.stargazers_count }}</p>
-      <p>{{ repository.updated_at }}</p>
+  <div class="card">
+    <a class="title" :href="repository.html_url">{{ repository.full_name }}</a>
+    <p>{{ repository.description }}</p>
+    <div class="memo">
+      <div class="stargazer">
+        <img alt="star" src="../assets/star.svg" width="18px" />
+        <p>{{ repository.stargazers_count }}</p>
+      </div>
+      <div class="stargazer">
+        <div
+          v-if="repository.language"
+          :style="{ backgroundColor: randomColor(repository.language) }"
+          class="repo-language"
+        ></div>
+        <p>{{ repository.language }}</p>
+      </div>
+      <p>{{ formatDate }}</p>
     </div>
   </div>
 </template>
 
 <script>
+import { format } from "../utils/timeFn";
 export default {
   name: "Repository",
   props: {
-    repositories: { type: Array },
-    total: { type: Number },
+    repository: { type: Object },
+    updateAt: { type: String },
   },
-  setup(props) {
-    console.log("props", props);
+  data() {
+    return {
+      languageColor: {},
+    };
+  },
+  computed: {
+    formatDate: function () {
+      return format(this.updateAt);
+    },
+  },
+  methods: {
+    randomColor(language) {
+      const r = () => Math.floor(256 * Math.random());
+      return this.languageColor[language] = `rgb(${r()}, ${r()}, ${r()})`
+    },
   },
 };
 </script>
 
 <style>
-h1 {
-  margin: 0;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--navColor);
-}
-.card {
-  padding-bottom: 1rem;
-  padding-top: 1rem;
-}
-.title {
-  text-decoration: none;
-  color: var(--primary);
-  font-size: var(--h1);
-  font-weight: var(--normal);
-}
 
-.title:hover {
-  text-decoration: underline;
+.stargazer {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
-.title:active {
-  text-decoration: underline;
+.repo-language {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--repo);
+}
+.memo {
+  display: flex;
+  gap: 20px;
+  color: var(--gray);
 }
 </style>

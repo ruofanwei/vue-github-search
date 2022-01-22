@@ -14,21 +14,36 @@
     </ul>
     <div class="search-results">
       <div v-if="activeTab.id === 1">
+        <h1>
+          Showing&nbsp;{{ repositories.total_count }}&nbsp;available repository
+          results
+        </h1>
         <Repository
-          :repositories="repositories.items"
-          :total="repositories.total_count"
+          v-for="item in repositories.items"
+          :key="item.id"
+          :updateAt="item.updated_at"
+          :repository="item"
         />
       </div>
       <div v-if="activeTab.id === 2">
+        <h1>
+          {{ topics.total_count }}&nbsp;topic results
+        </h1>
         <Topic
-          :topics="topics.items"
-          :total="topics.total_count"
+          v-for="item in topics.items"
+          :key="item.id"
+          :updateAt="item.updated_at"
+          :topic="item"
         />
       </div>
       <div v-if="activeTab.id === 3">
+        <h1>
+          {{ users.total_count }}&nbsp;users
+        </h1>
         <User
-          :users="users.items"
-          :total="users.total_count"
+          v-for="item in users.items"
+          :key="item.id"
+          :user="item"
         />
       </div>
     </div>
@@ -72,35 +87,23 @@ export default {
 </script>
 
 <style scoped>
-main {
-  display: flex;
-  padding: 1rem 10rem;
-  gap: 2rem;
-  align-items: flex-start;
-  justify-content: center;
-}
-ul {
-  display: flex;
-  list-style: none;
-  flex-direction: column;
-  cursor: pointer;
-  border: 1px solid var(--navColor);
-  margin: 0;
-  padding: 0;
-  border-radius: 6px;
-  font-size: 14px;
-}
-li {
-  padding: 0;
-  display: block;
-  border-bottom: 1px solid var(--navColor);
-}
-li:nth-child(3) {
-  border-bottom: none;
-}
 .active {
   background: var(--navColor);
   border-left: 2px solid var(--active);
+}
+@media (max-width: 768px) {
+  main {
+    padding: 10px 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+  ul {
+    flex-direction: row;
+  }
+  .active {
+    border-bottom: 2px solid var(--active);
+    border-left: none;
+  }
 }
 .menu-item {
   padding: 10px;
@@ -110,5 +113,7 @@ li:nth-child(3) {
   position: relative;
   display: flex;
   flex-direction: column;
+  word-break: break-word;
+  min-width: 70%;
 }
 </style>

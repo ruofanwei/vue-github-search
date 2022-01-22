@@ -1,23 +1,26 @@
 <template>
   <div>
-    <h1>Showing&nbsp;{{ total }}&nbsp;available user results</h1>
-    <div class="card" v-for="user in users" :key="user.id">
-
-      <p>{{ user.updated_at }}</p>
+    <div class="card">
+        <div class="wrapper">
+        <img class="avatar" alt="star" :src="user.avatar_url" width="30px" />
+      <a class="title" :href="`https://github.com/${user.login}`">{{ user.login }}</a>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-name: "User",
-props: {
-    users: { type: Array },
-    total: { type: Number },
-},
-}
+  name: "User",
+  props: {
+    user: { type: Object },
+
+  },
+};
 </script>
 
 <style>
-
+img {
+  border-radius: 50%;
+}
 </style>
