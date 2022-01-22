@@ -1,17 +1,18 @@
 const { Octokit } = require("@octokit/core");
 const octokit = new Octokit({
-  auth: `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`,
+  auth: process.env.VUE_APP_GITHUB_TOKEN,
 });
 
 /**
  * get repositories
  */
-export const getRepositories = async (queryString) => {
+export const getRepositories = async (queryString, page) => {
   const { data: repositories } = await octokit.request(
     "GET /search/repositories",
     {
       q: queryString,
-      per_page: 20
+      per_page: 20,
+      page: page
     }
   );
   return repositories;
@@ -20,10 +21,11 @@ export const getRepositories = async (queryString) => {
 /**
  * get topics
  */
-export const getTopics = async (queryString) => {
+export const getTopics = async (queryString, page) => {
   const { data: topics } = await octokit.request("GET /search/topics", {
     q: queryString,
     per_page: 20,
+    page: page
   });
   return topics;
 };
@@ -31,10 +33,11 @@ export const getTopics = async (queryString) => {
 /**
  * get users
  */
-export const getUsers = async (queryString) => {
+export const getUsers = async (queryString, page) => {
   const { data: users } = await octokit.request("GET /search/users", {
     q: queryString,
     per_page: 20,
+    page: page
   });
   return users;
 };

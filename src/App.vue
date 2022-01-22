@@ -1,14 +1,20 @@
 <template>
-  <div>
+  <div id="app">
     <Header @onSearch="getSearchQuery" :type="type" />
-    <Content @onActiveType="getActiveType" :repositories="repositories" :topics="topics" :users="users"/>
+    <Content
+      @onActiveType="getActiveType"
+      :repositories="repositories"
+      :topics="topics"
+      :users="users"
+    />
   </div>
 </template>
 
 <script>
-import { getRepositories, getTopics, getUsers } from "./api/github.api";
+import { mapGetters} from "vuex";
 import Header from "./components/Header.vue";
 import Content from "./components/Content.vue";
+import { getRepositories } from "./api/github.api";
 
 export default {
   name: "App",
@@ -20,52 +26,79 @@ export default {
     return {
       type: "repositories",
       searchQuery: "github",
-      repositories: {},
-      topics: {},
-      users: {},
+      page: 1,
+      isLoadMore: false,
     };
   },
-  created: async function () {
-    const result = await getRepositories(this.searchQuery);
-    this.repositories = result;
+  async created() {
+    this.resetPage();
+    const result = await getRepositories(this.searchQuery, this.page);
+    this.$store.commit("setRepositories", result)
+  },
+  mounted() {
+    this.loadMore();
+  },
+  updated() {
+    this.loadMore();
   },
   watch: {
     type: async function (type) {
+      this.resetPage();
       if (this.searchQuery.length >= 3) {
-        this.getSearchResult(this.searchQuery, type);
+        this.$store.dispatch("getSearchResult", {
+          searchQuery: this.searchQuery,
+          type: type,
+          page: this.page,
+        });
       }
     },
     searchQuery: async function (searchQuery) {
+      this.resetPage();
       if (searchQuery.length >= 3) {
-        this.getSearchResult(searchQuery, this.type);
+          this.$store.dispatch("getSearchResult", {
+            searchQuery: searchQuery,
+            type: this.type,
+            page: this.page,
+          })
+      }
+    },
+    page: async function (nextPage, oldPage) {
+      if (nextPage > oldPage) {
+        this.$store.dispatch("getMorResult", {
+          searchQuery: this.searchQuery,
+          type: this.type,
+          page: this.page,
+        });
       }
     },
   },
+  computed: {
+
+    ...mapGetters(["repositories", "topics", "users"]),
+  },
   methods: {
+
     async getSearchQuery(value) {
       this.searchQuery = value;
     },
     async getActiveType(value) {
       this.type = value;
     },
-    /**
-     * fetch github api according to search type
-     * @param string searchText - length of searchText must greater or equal to three words
-     * @param string type - Repositories | Topics | Users
-     * @return object
-     */
-    getSearchResult: async function (searchText, type) {
-      switch (type) {
-        case "Repositories":
-          this.repositories = await getRepositories(searchText);
-          break;
-        case "Topics":
-          this.topics = await getTopics(searchText);
-          break;
-        case "Users":
-          this.users = await getUsers(searchText);
-          break;
-      }
+    // detecting when the user has reached the bottom of the window
+    loadMore: async function () {
+      window.onscroll = async () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight;
+        if (bottomOfWindow) {
+          this.isLoadMore = true;
+          this.page += 1;
+        }
+      };
+    },
+    resetPage: function () {
+      this.page = 1;
+      this.isLoadMore = false;
     },
   },
 };

@@ -131,6 +131,9 @@ li {
   display: block;
   border-bottom: 1px solid var(--navColor);
 }
+img {
+  border-radius: 50%;
+}
 
 .card {
   padding-bottom: 1rem;

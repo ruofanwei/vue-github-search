@@ -20,7 +20,7 @@
         </h1>
         <Repository
           v-for="item in repositories.items"
-          :key="item.id"
+          :key="item.index"
           :updateAt="item.updated_at"
           :repository="item"
         />
@@ -31,7 +31,7 @@
         </h1>
         <Topic
           v-for="item in topics.items"
-          :key="item.id"
+          :key="item.index"
           :updateAt="item.updated_at"
           :topic="item"
         />
@@ -42,7 +42,7 @@
         </h1>
         <User
           v-for="item in users.items"
-          :key="item.id"
+          :key="item.index"
           :user="item"
         />
       </div>

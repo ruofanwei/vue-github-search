@@ -19,7 +19,5 @@ export default {
 </script>
 
 <style>
-img {
-  border-radius: 50%;
-}
+
 </style>
