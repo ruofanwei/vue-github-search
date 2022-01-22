@@ -14,7 +14,6 @@ export default {
   name: "User",
   props: {
     user: { type: Object },
-
   },
 };
 </script>

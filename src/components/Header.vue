@@ -4,6 +4,7 @@
       <img alt="github" src="../assets/github.svg" width="32px" />
       <input
         v-model.trim="searchText"
+        ref="searchText"
         type="text"
         placeholder="Search or jump to..."
       />
