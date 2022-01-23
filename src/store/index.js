@@ -7,16 +7,18 @@ export const store = new Vuex.Store({
   state: {
     repositories: {
       items: [],
-      total: 0,
+      total_count: 0,
     },
     topics: {
       items: [],
-      total: 0,
+      total_count: 0,
     },
     users: {
       items: [],
-      total: 0,
+      total_count: 0,
     },
+    isLoadMore: false,
+    page: 1,
   },
   actions: {
     /**
@@ -25,7 +27,7 @@ export const store = new Vuex.Store({
      * @param string type - Repositories | Topics | Users
      * @return
      */
-    async getSearchResult(context, payload) {
+    async GET_SEARCH_RESULT(context, payload) {
       const { searchQuery, type, page } = payload;
       let result;
       switch (type) {
@@ -42,38 +44,69 @@ export const store = new Vuex.Store({
           context.commit("setUsers", result);
           break;
       }
-      return result;
     },
     /**
      * fetch next page according to search type
-     * throttled and wait is the time interval in milliseconds
+     * To prevent unnecessary load, used the throttling
+     * throttling will execute the function only one time in 1000 milliseconds
      * @param string searchText - length of searchText must greater or equal to three words
      * @param string type - Repositories | Topics | Users
      * @return
      */
-    async getMorResult(context, payload) {
+    async LOAD_MORE_RESULT(context, payload) {
       const { searchQuery, type, page } = payload;
       let result;
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         setTimeout(async () => {
-          switch (type) {
-            case "Repositories":
-              result = await getRepositories(searchQuery, page);
-              context.commit("addRepositories", result.items);
-              resolve();
-              break;
-            case "Topics":
-              result = await getTopics(searchQuery, page);
-              context.commit("addTopics", result.items);
-              resolve();
-              break;
-            case "Users":
-              result = await getUsers(searchQuery, page);
-              context.commit("addUsers", result.items);
-              resolve();
-              break;
+          try {
+            switch (type) {
+              case "Repositories":
+                // check total available data
+                if (
+                  context.state.repositories.total_count <=
+                  context.state.repositories.items.length
+                )
+                  return context.commit("loaded", false);
+                // start load more data
+                context.commit("loaded", true);
+                result = await getRepositories(searchQuery, page);
+                resolve(result);
+                context.commit("addRepositories", result.items);
+                context.commit("loaded", false);
+                break;
+              case "Topics":
+                // check total available data
+                if (
+                  (context.state.topics.total_count =
+                    context.state.topics.items.length)
+                )
+                  return context.commit("loaded", false);
+                // start load more data
+                context.commit("loaded", true);
+                result = await getTopics(searchQuery, page);
+                resolve(result);
+                context.commit("addTopics", result.items);
+                context.commit("loaded", false);
+                break;
+              case "Users":
+                // check total available data
+                if (
+                  (context.state.users.total_count =
+                    context.state.users.items.length)
+                )
+                  return context.commit("loaded", false);
+                // start load more data
+                context.commit("loaded", true);
+                result = await getUsers(searchQuery, page);
+                resolve(result);
+                context.commit("addUsers", result.items);
+                context.commit("loaded", false);
+                break;
+            }
+          } catch (error) {
+            reject(error);
           }
-        }, 1000)
+        }, 1000);
       });
     },
   },
@@ -86,6 +119,12 @@ export const store = new Vuex.Store({
     },
     users(state) {
       return state.users;
+    },
+    isLoadMore(state) {
+      return state.isLoadMore;
+    },
+    page(state) {
+      return state.page;
     },
   },
   mutations: {
@@ -106,6 +145,16 @@ export const store = new Vuex.Store({
     },
     addUsers(state, users) {
       state.users.items = state.users.items.concat(users);
+    },
+    loaded(state, loadingStatus) {
+      state.isLoadMore = loadingStatus;
+    },
+    resetPage(state) {
+      state.page = 1;
+    },
+    addPage(state) {
+      state.isLoadMore = true;
+      state.page += 1;
     },
   },
 });

@@ -6,16 +6,15 @@
       :repositories="repositories"
       :topics="topics"
       :users="users"
+      :isLoading="isLoadMore"
     />
   </div>
 </template>
 
 <script>
-import { mapGetters} from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import Header from "./components/Header.vue";
 import Content from "./components/Content.vue";
-import { getRepositories } from "./api/github.api";
-
 export default {
   name: "App",
   components: {
@@ -26,26 +25,23 @@ export default {
     return {
       type: "repositories",
       searchQuery: "github",
-      page: 1,
-      isLoadMore: false,
     };
   },
   async created() {
-    this.resetPage();
-    const result = await getRepositories(this.searchQuery, this.page);
-    this.$store.commit("setRepositories", result)
+    this.$store.dispatch("GET_SEARCH_RESULT", {
+      searchQuery: this.searchQuery,
+      type: this.type,
+      page: this.page,
+    });
   },
   mounted() {
-    this.loadMore();
-  },
-  updated() {
-    this.loadMore();
+    this.scroll();
   },
   watch: {
     type: async function (type) {
-      this.resetPage();
+      this.$store.commit("resetPage");
       if (this.searchQuery.length >= 3) {
-        this.$store.dispatch("getSearchResult", {
+        this.$store.dispatch("GET_SEARCH_RESULT", {
           searchQuery: this.searchQuery,
           type: type,
           page: this.page,
@@ -53,19 +49,10 @@ export default {
       }
     },
     searchQuery: async function (searchQuery) {
-      this.resetPage();
+      this.$store.commit("resetPage");
       if (searchQuery.length >= 3) {
-          this.$store.dispatch("getSearchResult", {
-            searchQuery: searchQuery,
-            type: this.type,
-            page: this.page,
-          })
-      }
-    },
-    page: async function (nextPage, oldPage) {
-      if (nextPage > oldPage) {
-        this.$store.dispatch("getMorResult", {
-          searchQuery: this.searchQuery,
+        this.$store.dispatch("GET_SEARCH_RESULT", {
+          searchQuery: searchQuery,
           type: this.type,
           page: this.page,
         });
@@ -73,11 +60,11 @@ export default {
     },
   },
   computed: {
-
-    ...mapGetters(["repositories", "topics", "users"]),
+    ...mapState(["isLoadMore", "page"]),
+    ...mapGetters(["repositories", "topics", "users", "isLoadMore", "page"]),
   },
   methods: {
-
+    ...mapActions(["GET_SEARCH_RESULT", "LOAD_MORE_RESULT"]),
     async getSearchQuery(value) {
       this.searchQuery = value;
     },
@@ -85,20 +72,22 @@ export default {
       this.type = value;
     },
     // detecting when the user has reached the bottom of the window
-    loadMore: async function () {
-      window.onscroll = async () => {
+    scroll: function () {
+      window.onscroll = () => {
+        // added an event listener on the scroll event
         let bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight ===
           document.documentElement.offsetHeight;
+
         if (bottomOfWindow) {
-          this.isLoadMore = true;
-          this.page += 1;
+          this.$store.commit("addPage");
+          this.$store.dispatch("LOAD_MORE_RESULT", {
+            searchQuery: this.searchQuery,
+            type: this.type,
+            page: this.page,
+          });
         }
       };
-    },
-    resetPage: function () {
-      this.page = 1;
-      this.isLoadMore = false;
     },
   },
 };

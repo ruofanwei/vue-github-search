@@ -2,11 +2,13 @@
   <nav id="nav">
     <div class="searchBar">
       <img alt="github" src="../assets/github.svg" width="32px" />
+      <!-- onKeyUp event is triggered when the user releases keys  -->
       <input
         v-model.trim="searchText"
         ref="searchText"
         type="text"
         placeholder="Search or jump to..."
+        @keyup="DebounceFn"
       />
     </div>
     <img alt="github" src="../assets/avatar.svg" width="32px" />
@@ -22,13 +24,17 @@ export default {
   data() {
     return {
       searchText: "github",
+      typingTimeout: 0,
     };
   },
-  watch: {
-    // observe change of searchText
-    searchText: async function (searchText) {
-      if (searchText.length >= 3) {
-        this.$emit("onSearch", searchText);
+  methods: {
+    // If the user types very fast, will allow the execution of func only when the user has stopped typing in the search bar
+    DebounceFn: function () {
+      if (this.searchText.length >= 3) {
+        // schedule the execution after user stopped typing in the search bar
+        setTimeout(() => {
+          this.$emit("onSearch", this.searchText);
+        }, 1000);
       }
     },
   },

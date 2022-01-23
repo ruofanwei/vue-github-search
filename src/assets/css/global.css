@@ -108,7 +108,7 @@ h1 {
 }
 main {
   display: flex;
-  padding: 1rem 10rem;
+  padding: 2rem 10rem;
   gap: 2rem;
   align-items: flex-start;
   justify-content: center;
