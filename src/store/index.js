@@ -32,16 +32,22 @@ export const store = new Vuex.Store({
       let result;
       switch (type) {
         case "Repositories":
+          context.commit("loaded", true);
           result = await getRepositories(searchQuery, page);
           context.commit("setRepositories", result);
+          context.commit("loaded", false);
           break;
         case "Topics":
+          context.commit("loaded", true);
           result = await getTopics(searchQuery, page);
           context.commit("setTopics", result);
+          context.commit("loaded", false);
           break;
         case "Users":
+          context.commit("loaded", true);
           result = await getUsers(searchQuery, page);
           context.commit("setUsers", result);
+          context.commit("loaded", false);
           break;
       }
     },
