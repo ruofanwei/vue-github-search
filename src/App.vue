@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header @onSearch="getSearchQuery" :type="type" />
+    <Header @onSearch="getSearchQuery" />
     <Content
       @onActiveType="getActiveType"
       :repositories="repositories"

@@ -18,13 +18,9 @@
 <script>
 export default {
   name: "Header",
-  props: {
-    type: { type: String, default: "" },
-  },
   data() {
     return {
       searchText: "github",
-      typingTimeout: 0,
     };
   },
   methods: {

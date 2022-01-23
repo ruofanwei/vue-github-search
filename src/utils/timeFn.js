@@ -15,8 +15,8 @@ export const format = (updateAt) => {
 
   if (diffDay < 3) {
     dayjs.extend(relativeTime);
-    return dayjs(formatUpdateAt).fromNow(true);
+    return "Updated " + dayjs(formatUpdateAt).fromNow(true) + " ago";
   }
 
-  return dayjs(updateAt).format("D MMM, YYYY");
+  return "Updated on " + dayjs(updateAt).format("D MMM, YYYY");
 };
