@@ -83,8 +83,8 @@ export const store = new Vuex.Store({
               case "Topics":
                 // check total available data
                 if (
-                  (context.state.topics.total_count =
-                    context.state.topics.items.length)
+                  context.state.topics.total_count <=
+                  context.state.topics.items.length
                 )
                   return context.commit("loaded", false);
                 // start load more data
@@ -97,8 +97,8 @@ export const store = new Vuex.Store({
               case "Users":
                 // check total available data
                 if (
-                  (context.state.users.total_count =
-                    context.state.users.items.length)
+                  context.state.users.total_count <=
+                  context.state.users.items.length
                 )
                   return context.commit("loaded", false);
                 // start load more data
