@@ -6,10 +6,10 @@
     "node": "18.x"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
+    "test:unit": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service test:unit",
+    "test:e2e": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service test:e2e",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
